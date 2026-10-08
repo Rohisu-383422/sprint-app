@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>練習強度設定（スマホ版）</title>
+<style>
+:root{--bg:#f1f5f9;--card:#fff;--fg:#0f172a;--mut:#64748b;--line:#e2e8f0;--acc:#4f46e5;--ok:#047857;--warn:#b45309;--bad:#be123c;--info:#0369a1;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0f172a;--card:#1e293b;--fg:#f1f5f9;--mut:#94a3b8;--line:#334155;--acc:#818cf8;--ok:#34d399;--warn:#fbbf24;--bad:#fb7185;--info:#38bdf8}}
+*{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--fg);font:15px/1.5 -apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}
+html{-webkit-text-size-adjust:100%}header{padding:12px 14px 4px;font-weight:800;font-size:17px;max-width:720px;margin:0 auto}main{padding:8px 12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row>label{display:flex;flex-direction:column;font-size:11px;color:var(--mut);gap:2px}
+input,select,button,textarea{font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 8px;min-height:44px;font-size:16px}
+input[type=number],input[type=text]{width:92px}input.w{width:100%}select{max-width:100%}
+button{cursor:pointer}button.p{background:var(--acc);color:#fff;border-color:var(--acc);font-weight:700}button.d{color:var(--bad)}
+.badge{display:inline-block;border-radius:999px;padding:2px 8px;font-size:12px;font-weight:700;border:1px solid currentColor}
+.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}.info{color:var(--info)}.mut{color:var(--mut);font-size:12px}
+.t{font:800 22px ui-monospace,Menlo,monospace}.sets{display:flex;gap:10px;overflow-x:auto}.sets>div{min-width:96px;text-align:center}
+nav{justify-content:center;position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{max-width:150px;flex:1;border:0;border-radius:0;min-height:56px;background:none;font-size:12px;font-weight:700;color:var(--mut)}nav button.on{color:var(--acc);box-shadow:inset 0 3px var(--acc)}
+h3{margin:4px 0 8px;font-size:14px}.bar{height:8px;border-radius:4px;background:var(--line);overflow:hidden}.bar i{display:block;height:100%}
+.fld{display:flex;flex-direction:column;font-size:11px;color:var(--mut);gap:2px}.stp{display:flex;gap:4px}.stp button{min-width:44px;padding:0;font-size:20px}.stp input{width:60px;text-align:center;padding:10px 2px}.chips{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}.chips button{min-height:40px;font-size:13px}
+.err{border-color:var(--bad)!important;background:color-mix(in srgb,var(--bad) 12%,var(--card))!important}table{border-collapse:collapse;width:100%}th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}th:first-child,td:first-child{position:sticky;left:0;background:var(--card);text-align:left;max-width:42vw;overflow:hidden;text-overflow:ellipsis}.tw{overflow-x:auto}main{max-width:720px;margin:0 auto}details>summary{cursor:pointer;font-weight:700;min-height:36px;display:flex;align-items:center}
+#sb{display:none;position:fixed;left:12px;right:12px;bottom:calc(72px + env(safe-area-inset-bottom,0px));max-width:696px;margin:0 auto;background:#0f172a;color:#fff;border-radius:10px;padding:8px 12px;align-items:center;justify-content:space-between;gap:10px;z-index:20}#sb button{min-height:36px}#pv{display:none}.rw{display:flex;flex-direction:column;height:calc(100vh - 132px - env(safe-area-inset-bottom,0px));height:calc(100dvh - 132px - env(safe-area-inset-bottom,0px));min-height:300px}.rg{flex:1;display:grid;gap:8px;grid-auto-rows:1fr;min-height:0}.tile{display:flex;flex-direction:column;gap:4px;border:2px solid var(--line);border-radius:12px;padding:6px;background:var(--card);min-height:0}.tile .tt{font:800 clamp(18px,6vw,30px) ui-monospace,Menlo,monospace;text-align:center;line-height:1.1}.tile .big{flex:1;min-height:0;font-size:clamp(15px,4.4vw,26px);font-weight:800;border-radius:10px}.sm{min-height:30px;padding:2px 10px;font-size:12px}
+.goal{width:100%;min-height:34vh;font-size:30px;font-weight:800;border-radius:16px;margin-bottom:10px}.bigt{font:800 54px ui-monospace,Menlo,monospace;text-align:center}#dlg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);align-items:center;justify-content:center;z-index:30;padding:16px}.dbox{background:var(--card);border-radius:12px;padding:16px;max-width:420px;width:100%}.dbox p{white-space:pre-wrap;margin:0 0 10px}
+@media print{header,main,nav,#sb{display:none!important}#pv{display:block}body{background:#fff;color:#000;padding:0}#pv h1{font-size:22px;margin:0 0 4px}.pbx{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.pbx>div{border:2px solid #000;border-radius:8px;padding:6px 12px;text-align:center;font-size:13px}.pbx b{font-size:18px}.pt{width:100%}.pt th,.pt td{border:1px solid #000;padding:8px 6px;text-align:center;white-space:normal}.pt th:first-child,.pt td:first-child{position:static;max-width:none;overflow:visible;background:#fff;text-align:left;font-weight:700;font-size:16px}.pt .tm{font:800 22px ui-monospace,Menlo,monospace}.rc{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;margin-top:4px}.rc i{display:inline-block;width:42px;height:22px;border-bottom:1.5px solid #000}}
+/* 見やすさの改善 */
+body{font-size:16px;line-height:1.55;-webkit-tap-highlight-color:transparent;font-variant-numeric:tabular-nums}
+.mut{font-size:13px}.row>label,.fld{font-size:12px}h3{font-size:15px}
+.t,.bigt,.tt,input,td,th{font-variant-numeric:tabular-nums}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}button:disabled{opacity:.45}
+.bn{border-radius:10px;padding:10px 12px;font-weight:700;border:1px solid currentColor;background:color-mix(in srgb,currentColor 10%,var(--card))}
+nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;line-height:1.1;font-size:12px}nav button .ic{font-size:20px}
+th{background:color-mix(in srgb,var(--line) 60%,var(--card));font-size:13px}
+tr:nth-child(even) td{background:color-mix(in srgb,var(--line) 35%,var(--card))}
+td.t{font-size:18px;font-weight:800}td{padding:9px 8px}
+header .dt{float:right;font-weight:600;font-size:14px}
+html.big body{font-size:19px}html.big .mut{font-size:16px}html.big .row>label,html.big .fld{font-size:14px}html.big h3{font-size:18px}html.big td.t{font-size:22px}html.big input,html.big select,html.big button,html.big textarea{font-size:18px}html.big th{font-size:15px}html.big nav button{font-size:13px}
+</style></head><body>
+<header>練習強度設定 <span class="mut">スマホ版</span></header><main id="m"></main>
+<nav id="nav"></nav><div id="sb"></div><div id="dlg"></div><div id="pv"></div>
+<script>
+const $=s=>document.querySelector(s),KEY='sprint_mobile_v1';
+const Z=[['rec','回復',55],['ext','テンポ',70],['int','インテンシブ',85],['se','スピード持久',92],['se2','特殊持久',96],['max','最大スピード',99]];
+const ZN=Object.fromEntries(Z.map(z=>[z[0],z[1]])),STD=Object.fromEntries(Z.map(z=>[z[0],z[2]]));
+const zk=I=>I>=98?'max':I>=95?'se2':I>=90?'se':I>=80?'int':I>=65?'ext':'rec';
+const CAP={rec:[3000,3000],ext:[2000,3000],int:[1200,2000],se:[1000,1000],se2:[900,1200],max:[400,400]};
+const REP={rec:[600,800,1000,1000,1000],ext:[200,300,400,400,400],int:[200,250,350,350,350],se:[150,200,300,300,300],se2:[100,120,250,250,250],max:[60,60,120,120,120]};
+const PROF={beginner:{n:'初心者中心',d:'入門・初級が多いチーム向け。入門・初級の量と本数を絞り、高強度は週2日まで（中級以上は標準と同じ）。',cs:1,lf:[.5,.7,1,1,1],mr:[4,5,10,10,10],hd:2,wc:3.5},standard:{n:'標準',d:'中級が中心の標準的なチーム向け（初期値）。',cs:1,lf:[.6,.8,1,1,1],mr:[5,6,10,10,10],hd:3,wc:3.5},advanced:{n:'強化（経験者中心）',d:'中級以上が多く、上位大会を目指すチーム向け。上限に余裕をもたせます。',cs:1.15,lf:[.7,.9,1,1,1],mr:[6,8,12,12,12],hd:3,wc:4}};
+const P=()=>PROF[S.team]||PROF.standard,EVM={'100':1,'200':1.25,'400':1.6};
+const base=()=>{const p=P();return{cap:Object.fromEntries(Object.entries(CAP).map(([k,v])=>[k,v.map(x=>Math.round(x*p.cs/50)*50)])),lf:[...p.lf],mr:[...p.mr],rep:JSON.parse(JSON.stringify(REP)),er:[1,1.25,1.6],wk:{hd:p.hd,wc:p.wc,ml:1}}};
+const L=()=>S.lim||base();
+const TD={rec:['〜60%（ジョグ〜流し）','100〜400m（ウォークバック）','疲労回復・血流促進、フォーム確認','会話できる楽なペース。ハードな練習の翌日や整理運動に。'],ext:['70〜80%（200m PBの平均速度に対する比）','100〜400m（短い休息で反復）','有酸素能力（基礎体力）の向上と積極的休養','息が少し上がる程度で、乳酸を溜めすぎない。毛細血管を発達させ、回復力を高める身体のベース作り。フォームの確認にも最適。'],int:['80〜90%（200m PBの平均速度に対する比）','100〜400m（テンポよりやや長めの休息）','解糖系（無酸素性）の容量拡張と、乳酸耐性の基礎づくり','乳酸が溜まり始めるゾーン。苦しくてもフォームを崩さず走る土台を作り、スピード持久・特殊持久に耐える準備をする。'],se:['90〜100%','60〜150m程度（7〜15秒前後）','トップスピードの維持（失速を防ぐ）','疲労し始めても速度を落とさない力を鍛える。1本ごとに5〜10分程度の休息を取り、質を落とさず走る。'],se2:['90〜100%','150〜600m程度（15秒以上）','レース本番の極限状態（強い乳酸蓄積）への適応','レース距離に近い距離をほぼ全力で走る最も過酷な練習。15〜20分以上の完全休息を取って次へ。'],max:['98〜100%','20〜60m（加速走・フライング）','最高速度の向上と神経系の刺激','完全休息（60m以下は10mあたり約1〜1.5分）で全力走。質が落ちたら打ち切る。']};
+const SEASON={base:['基礎づくり期',1.2,.8],build:['強化期（標準）',1,1],comp:['試合期',.8,.85],taper:['試合前',.5,.6],restart:['再開期',.6,.4]};
+const REST={max:d=>d<=60?[Math.max(120,d*6),Math.max(180,d*9)]:d<=150?[480,720]:[900,1500],se2:d=>d<=100?[480,720]:d<=150?[600,900]:d<=300?[900,1200]:[1200,1500],se:d=>d<=60?[180,300]:d<=150?[300,600]:d<=250?[480,720]:[600,900],int:d=>d<=150?[120,180]:d<=250?[180,240]:[240,360],ext:()=>[30,90],rec:()=>null};
+const td0=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const def=()=>({tab:'today',date:td0(),gfix:null,gn:0,gsel:null,tm:[],sel:{sid:0,rep:1,g:-1},run:{stage:'ready',t0:0,gs:[],gi:0},restEnd:0,menus:[],hist:[],mo:0,lim:null,notes:{},gsz:4,gdist:'100',gp:0,go:0,rec:1,lastBackup:0,team:'standard',wlog:{},q:'',rq:'',help:'',intensity:85,season:'build',surface:'tartan',shoe:'spike',climate:'normal',start:'blocks',form:1,timing:'auto',wu:30,cd:10,nid:3,
+ athletes:[{id:1,name:'選手A',pb100:'11.80',pb200:'24.00',pb400:'',level:3,event:'100',on:1},{id:2,name:'選手B',pb100:'13.00',pb200:'27.00',pb400:'',level:2,event:'100',on:1}],
+ sets:[{id:1,v:200,r:3,p:'se',i:92,rest:''},{id:2,v:150,r:1,p:'se2',i:96,rest:''}],extra:{}});
+let S;try{S={...def(),...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){S=def()}S.q='';S.rq='';
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+/* ---- 計算 ---- */
+const pt=v=>{if(v==null)return NaN;let s=String(v).trim().replace(/[０-９．]/g,c=>c==='．'?'.':String.fromCharCode(c.charCodeAt(0)-0xFEE0)).replace(/：/g,':').replace(/[秒″"”](?=\d)/g,'.').replace(/[分′'’]/g,':').replace(/[秒″"”\s]/g,'');if(/^\d+\.\d+\.\d+$/.test(s))s=s.replace('.',':');if(s.endsWith(':'))s=s.slice(0,-1);if(s.includes(':')){const[m,x]=s.split(':');return(parseFloat(m)||0)*60+(parseFloat(x)||0)}return parseFloat(s)};
+const ft=x=>{const r=Math.round(x*100)/100;if(r<60)return r.toFixed(2);const m=Math.floor(r/60);return m+':'+(r-m*60).toFixed(2).padStart(5,'0')};
+const TAU=1.2,RT=.15;
+const tfd=(d,v)=>{let lo=0,hi=60;for(let k=0;k<50;k++){const m=(lo+hi)/2;if(v*(m-TAU*(1-Math.exp(-m/TAU)))<d)lo=m;else hi=m}return(lo+hi)/2};
+const vmax=t=>100/Math.max(t-RT-TAU,5);
+const tad=(a,d)=>{const p=[[100,pt(a.pb100)],[200,pt(a.pb200)],[400,pt(a.pb400)]].filter(x=>x[1]>0);if(!p.length)return null;if(p.length==1)return p[0][1]*Math.pow(d/p[0][0],1.08);let i=0;while(i<p.length-2&&d>p[i+1][0])i++;const[d1,t1]=p[i],[d2,t2]=p[i+1];let b=Math.log(t2/t1)/Math.log(d2/d1);if(d>d2){b=Math.min(1.25,Math.max(b,1.1));return t2*Math.pow(d/d2,b)}b=Math.min(1.25,Math.max(1,b));return t1*Math.pow(d/d1,b)};
+const acc=d=>d<=100?1.35:1.35+Math.min(.65,(d-100)/300*.65);
+const env=()=>1+(S.surface==='dirt'?.022:0)+(S.shoe==='running'?.017:0)+(S.climate==='cold'?.013:0);
+const okV=v=>v>=10&&v<=2000,okR=r=>r>=1&&r<=50,okT=(f,t)=>{if(String(t).trim()==='')return true;const v=pt(t),r={pb100:[7,40],pb200:[15,80],pb400:[35,200]}[f]||[1,400];return v>=r[0]&&v<=r[1]};
+const bad=(k,f,v)=>k==='s'?(f==='v'?!okV(+v):f==='r'?!okR(+v):f==='i'?(v!==''&&!(v>=50&&v<=100)):0):(k==='a'&&/^pb/.test(f))?!okT(f,v):0;
+const sets=()=>S.sets.filter(s=>okV(+s.v)&&okR(+s.r));
+const setI=s=>s.i>=50&&s.i<=100?+s.i:S.intensity,setZ=s=>s.p||zk(setI(s));
+function tgt(a,d,I,z){ // 秒を返す。計算できなければ null
+ const form=+S.form||1,fly=S.start==='fly';let t;
+ const t200=pt(a.pb200)>0?pt(a.pb200):tad(a,200);if(!(t200>0))return null;
+ if(z==='rec'||z==='ext'||z==='int'){let v=200/(t200/form);if(d>200){const b=tad(a,d);if(!b)return null;v=d/(b/form)}
+  t=d/(v*I/100);if(d<100&&!fly){const t100=pt(a.pb100)>0?pt(a.pb100):t200/2.06;t=Math.max(t,RT+tfd(d,vmax(t100/form)*I/100))}}
+ else if(d<100){let t100=pt(a.pb100);if(!(t100>0)){const t2=pt(a.pb200),t4=pt(a.pb400);t100=t2>0?t2/2.06:(t4>0?t4/4.6:NaN)}if(!(t100>0))return null;t100/=form;const v=vmax(t100)*I/100;t=fly?d/v*1.03:RT+tfd(d,v)}
+ else{const b=tad(a,d);if(!b)return null;const x=b/form,c=acc(d);t=((x-c)/(I/100)+c)}
+ t*=env();if(!fly){if(S.timing==='manual')t-=.24;if(S.start==='stand')t+=.25}return t>0?t:null}
+const sf=I=>{const[,lo,hi]=SEASON[S.season]||SEASON.build,k=Math.min(1,Math.max(0,(I-85)/10));return lo+(hi-lo)*k};
+const lf=(lv,I)=>1+(L().lf[lv-1]-1)*Math.min(1,Math.max(0,(I-60)/30));
+const cap=(lv,ev,I,z)=>Math.max(50,Math.round(L().cap[z][ev==='400'?1:0]*lf(lv,I)*(S.climate==='cold'?.9:1)*sf(I)/50)*50);
+const mrep=(z,lv,ev)=>Math.round(L().rep[z][lv-1]*(['ext','int','se','se2'].includes(z)?(L().er[{'100':0,'200':1,'400':2}[ev]||0]||1):1)/10)*10;
+function judge(a){const lv=a.level||3,ev=a.event||'100';let sh=0,bad=null,hr=0;
+ sets().forEach(s=>{const z=setZ(s),I=setI(s);sh+=s.v*s.r/cap(lv,ev,I,z);if(!bad&&s.v>mrep(z,lv,ev))bad=s.v+'mは1本'+mrep(z,lv,ev)+'m超';if(z==='se2'||z==='max')hr+=+s.r});
+ const ro=hr>L().mr[lv-1];let st=sh>1.25?'bad':sh>1?'warn':(bad||ro)?'warn':'ok';
+ return{st,sh,sug:sh>1?sets().map(s=>s.v+'m×'+Math.max(1,Math.floor(s.r/sh))+'本').join(' / '):'',why:[sh>1?'総量':'',bad||'',ro?hr+'本は多い':''].filter(Boolean).join('・')}}
+const toSec=t=>{t=String(t||'').replace(/[（(].*?[）)]/g,'');const m=[...t.matchAll(/(\d+(?:\.\d+)?)\s*(分|秒)?/g)].map(x=>({v:+x[1],u:x[2]}));if(!m.length)return null;let u=null;for(let i=m.length-1;i>=0;i--){if(m[i].u)u=m[i].u;else m[i].u=u||'分'}const s=m.map(x=>x.u==='分'?x.v*60:x.v);return s.reduce((a,b)=>a+b)/s.length};
+const fs_=x=>x<120?Math.max(10,Math.round(x/10)*10)+'秒':(Math.round(x/30)/2)+'分';
+const restTxt=s=>{if(s.rest&&s.rest.trim())return s.rest.trim();const z=setZ(s),r=REST[z](s.v);if(!r)return'ウォークバック';const a=fs_(r[0]),b=fs_(r[1]);return(a.slice(-1)===b.slice(-1)?a.slice(0,-1):a)+'〜'+b+(z==='ext'?'（歩いて戻る）':'')};
+const present=()=>S.athletes.filter(a=>a.on&&a.name.trim());
+function dur(){let run=0,rest=0;const NS=sets().length;sets().forEach((s,i)=>{const v=present().map(a=>tgt(a,s.v,setI(s),setZ(s))).filter(x=>x>0),r=v.length?v.reduce((x,y)=>x+y)/v.length:s.v*.17,rs=toSec(restTxt(s))??s.v/1.3;run+=s.r*r;const pk=Math.max(1,Math.min(+s.pb||1,+s.r)),bl=Math.ceil(s.r/pk),ri=toSec(s.restIn)??60;rest+=(s.r-bl)*ri+(bl-1)*rs+(i<NS-1?rs:0)});return{run,rest}}
+/* ---- 表示 ---- */
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const opt=(l,v,c)=>l.map(x=>`<option value="${x[0]}"${String(x[0])===String(c)?' selected':''}>${x[1]}</option>`).join('');
+const ZC={rec:'#94a3b8',ext:'#38bdf8',int:'#14b8a6',se:'#f59e0b',se2:'#ef4444',max:'#a855f7'},TI={today:'📝',times:'📊',meas:'⏱️',week:'📅',roster:'👥',conf:'⚙️'};
+const TABS=[['today','メニュー'],['times','タイム'],['meas','計測'],['week','週'],['roster','名簿'],['conf','設定']];
+const inN=(k,id,f,v,ph)=>`<input type="number" inputmode="numeric" data-k=${k} data-id=${id} data-f=${f} value="${v}"${ph!=null?` placeholder="${ph}"`:''} class="${bad(k,f,v)?'err':''}">`;
+const inT=(k,id,f,v,ph)=>`<input type="text" ${/^pb(100|200)$/.test(f)?'inputmode="decimal"':''} ${k==='a'?'data-nr=1':''} data-k=${k} data-id=${id} data-f=${f} value="${esc(v)}" placeholder="${esc(ph||'')}" class="${bad(k,f,v)?'err':''}">`;
+const sel=(k,id,f,l,c)=>`<select data-k=${k} data-id=${id} data-f=${f}>${l}</select>`;
+const blk=s=>(+s.pb||1)>1?`（${s.pb}本ずつ・本間${(s.restIn||'').trim()||'1分'}）`:'';
+const sumLine=s=>`${ZN[setZ(s)]}・${setI(s)}%・レスト ${restTxt(s)}${blk(s)}`;
+function judgeBox(){const ps=present(),js=ps.map(a=>({a,...judge(a)})),fl=js.filter(x=>x.st!=='ok'),big=fl.some(x=>x.st==='bad'),maj=ps.length&&fl.length/ps.length>=.5,inv=S.sets.length-sets().length,mx=Math.max(0,...js.map(x=>x.sh));
+ const t=!ps.length?['info','出席の選手がいません']:!fl.length?['ok','✅ 全員、上限内です']:maj?[big?'bad':'warn','⚠️ '+fl.length+'名が上限を超えています']:[big?'warn':'info','ℹ️ 上限内'+(ps.length-fl.length)+'名・超過'+fl.length+'名'];
+ return`<h3>判定（上限比 最大 ${(mx*100).toFixed(0)}%）</h3>${inv?`<div class="bad">⚠️ 距離・本数が正しくないセットが${inv}つあります（赤枠）。計算に入れていません。</div>`:''}<div class="bn ${t[0]}">${t[1]}</div>${fl.slice(0,3).map(x=>`<div class="mut">${esc(x.a.name)}（Lv${x.a.level}・${x.a.event}m系）${(x.sh*100).toFixed(0)}% ${x.why}</div>`).join('')}${js.length?`<details style="margin-top:6px"><summary>全員の上限比（${js.length}名・超過${fl.length}名）</summary>${[...js].sort((a,b)=>b.sh-a.sh).map(x=>`<div style="margin:6px 0"><div class="row" style="justify-content:space-between"><span class="${x.st==='ok'?'':x.st==='bad'?'bad':'warn'}">${esc(x.a.name)} <span class="mut">Lv${x.a.level}・${x.a.event}m系</span></span><b>${(x.sh*100).toFixed(0)}%</b></div><div class="bar"><i style="width:${Math.min(100,x.sh*100/1.5)}%;background:var(--${x.st==='ok'?'ok':x.st==='bad'?'bad':'warn'})"></i></div>${x.why?`<div class="mut">${x.why}</div>`:''}${x.sug?`<div class="info">本数の目安: ${x.sug}</div>`:''}</div>`).join('')}</details>`:''}`}
+function durBox(){const D=dur(),tot=(D.run+D.rest)/60+ +S.wu+ +S.cd;return`<h3>所要時間（目安）約 ${Math.round(tot)}分</h3><div class="mut">メインセット 約${Math.round((D.run+D.rest)/60)}分（走行${Math.round(D.run/60)}分＋レスト${Math.round(D.rest/60)}分）</div>`}
+function vToday(){return`<div class="card"><div class="row"><label>練習日<input type="date" data-k=c data-f=date value="${S.date}"></label><label>全体の強度%${inN('c',0,'intensity',S.intensity)}</label></div>
+ <div class="row" style="margin-top:6px"><label>チーム<select data-k=c data-f=team>${opt(Object.entries(PROF).map(([k,v])=>[k,v.n]),0,S.team)}</select></label><label>時期<select data-k=c data-f=season>${opt(Object.entries(SEASON).map(([k,v])=>[k,v[0]]),0,S.season)}</select></label></div></div>
+ ${S.sets.map((s,i)=>`<div class="card" style="border-left:6px solid ${ZC[setZ(s)]}"><div class="row"><b>${i+1}.</b><div class="fld">距離m<div class="stp"><button data-act=dec data-id=${s.id} data-f=v data-d=10>−</button>${inN('s',s.id,'v',s.v)}<button data-act=inc data-id=${s.id} data-f=v data-d=10>＋</button></div></div><div class="fld">本数<div class="stp"><button data-act=dec data-id=${s.id} data-f=r data-d=1>−</button>${inN('s',s.id,'r',s.r)}<button data-act=inc data-id=${s.id} data-f=r data-d=1>＋</button></div></div>
+ <label>目的<select data-k=s data-id=${s.id} data-f=p><option value="">自動</option>${opt(Z,0,s.p)}</select></label><label>強度%${inN('s',s.id,'i',s.i>=50?s.i:'',S.intensity)}</label></div>
+ <div class="row" style="margin-top:6px"><div class="fld">ブロック（本ずつ）<div class="stp"><button data-act=dec data-id=${s.id} data-f=pb data-d=1>−</button><input type="number" inputmode="numeric" data-k=s data-id=${s.id} data-f=pb data-rr=1 value="${s.pb||1}"><button data-act=inc data-id=${s.id} data-f=pb data-d=1>＋</button></div></div>${(+s.pb||1)>1?`<label style="flex:1">本間レスト（空欄は1分）${inT('s',s.id,'restIn',s.restIn||'','1分')}</label>`:''}</div>
+ <div class="row" style="margin-top:6px"><label style="flex:1">レスト（空欄は自動）${inT('s',s.id,'rest',s.rest||'',restTxt({...s,rest:''}))}</label><button data-act=info data-id=${setZ(s)} title="目的の詳細">ⓘ</button><button class="d" data-act=delset data-id=${s.id}>削除</button></div>
+ <div class="mut" data-live="sum${s.id}">${sumLine(s)}</div></div>`).join('')}
+ <div class="mut">目的を選んで、標準のセットを追加</div><div class="chips">${Z.map(z=>`<button data-act=qs data-id=${z[0]}>＋${z[1]}</button>`).join('')}</div><button class="p" data-act=addset style="width:100%;margin-bottom:10px">＋ 空のセットを追加</button>
+ <div class="card" data-live=judge>${judgeBox()}</div>
+ <div class="card"><div data-live=dur>${durBox()}</div><div class="row" style="margin-top:6px"><label>ウォームアップ分${inN('c',0,'wu',S.wu)}</label><label>クールダウン分${inN('c',0,'cd',S.cd)}</label></div></div>${vMenus()}`}
+function tbl(){const ss=sets(),q=S.q.trim(),all=present(),ps=all.filter(a=>!q||a.name.includes(q));if(!ss.length)return'<div class="mut">セットがありません。「メニュー」で追加してください。</div>';
+ const miss=all.filter(a=>!(pt(a.pb100)>0||pt(a.pb200)>0||pt(a.pb400)>0));
+ return`<div class="tw"><table><tr><th>選手</th>${ss.map(s=>`<th style="border-bottom:4px solid ${ZC[setZ(s)]}">${s.v}m<div class="mut">${ZN[setZ(s)]}</div></th>`).join('')}</tr>${ps.map(a=>`<tr><td>${esc(a.name)} <span class="mut">Lv${a.level}</span>${(()=>{const j=judge(a);return j.sug?`<div class="mut info" style="white-space:normal">目安 ${j.sug}</div>`:''})()}</td>${ss.map(s=>{const t=tgt(a,s.v,setI(s),setZ(s));return`<td class="t">${t?ft(t):'―'}</td>`}).join('')}</tr>`).join('')}</table></div>${miss.length?`<div class="mut warn">PB未入力・形式エラー: ${miss.map(a=>esc(a.name)).join('、')}</div>`:''}<div class="mut">${ps.length}名を表示</div>`}
+function vTimes(){return`<div class="card noprint"><div class="row"><input type="text" class="w" style="flex:1" data-k=c data-f=q placeholder="名前で検索" value="${esc(S.q)}"><button class="p" data-act=share>共有・コピー</button><button data-act=print>印刷・PDF</button><label style="flex-direction:row;align-items:center;gap:4px"><input type="checkbox" style="min-height:0" data-k=c data-f=rec ${S.rec!==0?'checked':''}>記録欄</label></div></div>
+ <div class="card"><b>${S.date.replace(/-/g,'/')} の練習</b>${sets().map(s=>`<div>${s.v}m × ${s.r}本　<span class="mut">${sumLine(s)}</span></div>`).join('')}</div><details class="card noprint" id="gd" ${S.go?'open':''}><summary>組分け（実力別）</summary><div class="row" style="margin:8px 0"><label>基準<select data-k=c data-f=gdist>${opt([['100','100m PB'],['200','200m PB'],['400','400m PB']],0,S.gdist)}</select></label><label>1組の人数<select data-k=c data-f=gsz>${opt([2,3,4,5,6,7,8].map(n=>[n,n+'人']),0,S.gsz)}</select></label><label style="flex-direction:row;align-items:center;gap:4px"><input type="checkbox" style="min-height:0" data-k=c data-f=gp ${S.gp?'checked':''}>印刷に含める</label></div>${groupBox(1)}</details>
+ <div class="card" data-live=tbl>${tbl()}</div>`}
+const WD=['月','火','水','木','金','土','日'],pY=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)},ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const wdays=()=>{const d=pY(S.date),w=(d.getDay()+6)%7;return Array.from({length:7},(_,i)=>ymd(new Date(d.getFullYear(),d.getMonth(),d.getDate()-w+i)))};
+const WW={rec:.2,ext:.4,int:.7,se:1,se2:1.2,max:1},HZ=['se','se2','max'];
+function week(){const days=wdays().map(ds=>{const e=S.wlog[ds],ss=e&&!e.rest?(e.sets||[]).map(x=>({...x,z:x.purpose||zk(x.intensity)})):[];return{ds,rest:!!(e&&e.rest),match:!!(e&&e.match),label:(e&&e.label)||'',has:!!e,ss,high:ss.some(x=>HZ.includes(x.z)),se2:ss.some(x=>x.z==='se2')}});
+ const hd=days.filter(x=>x.high).length,md=days.filter(x=>x.match).length,tr=days.filter(x=>x.has&&!x.rest).length,pr={hd:L().wk.hd,wc:L().wk.wc};let run=0,mr=0;days.forEach(x=>{run=x.high?run+1:0;mr=Math.max(mr,run)});
+ const load=a=>md*L().wk.ml+days.reduce((s,x)=>s+x.ss.reduce((q,t)=>q+t.value*(t.reps||1)/cap(a.level||3,a.event||'100',t.intensity,t.z)*WW[t.z],0),0);
+ const WL=present().map(a=>({a,l:load(a)})),m=[];
+ if(hd>pr.hd)m.push(['warn','高強度の日が'+hd+'日あります（上限'+pr.hd+'日）。']);
+ if(days.some((x,i)=>i<6&&x.se2&&days[i+1].se2))m.push(['warn','特殊持久が連日になっています。']);
+ if(mr>=3)m.push(['warn','高強度が'+mr+'日連続です。']);else if(mr===2)m.push(['info','高強度が2日連続です。2日目を抑えられないか確認してください。']);
+ if(tr>=6)m.push(['info','練習が6日以上あります。休養日を入れてください。']);
+ days.forEach((x,i)=>{if(!x.match)return;const lb=x.ds.slice(5).replace('-','/')+'の試合',pv=days[i-1],nx=days[i+1];
+  if(pv&&pv.se2)m.push(['warn',lb+'の前日に特殊持久が入っています。']);else if(pv&&pv.high)m.push(['info',lb+'の前日に高強度が入っています。量を抑えてください。']);
+  if(nx&&nx.se2)m.push(['warn',lb+'の翌日に特殊持久が入っています。回復を優先してください。']);else if(nx&&nx.high)m.push(['info',lb+'の翌日に高強度が入っています。回復を優先できないか確認してください。'])});
+ const fl=WL.filter(x=>x.l>pr.wc);if(fl.length)m.push([fl.length/Math.max(1,WL.length)>=.5?'warn':'info','週の負荷が上限（'+pr.wc+'）を超える選手: '+fl.slice(0,8).map(x=>x.a.name+'('+x.l.toFixed(1)+')').join('、')]);
+ return{days,hd,md,tr,m,mx:WL.length?Math.max(...WL.map(x=>x.l)):0,pr}}
+function vWeek(){const w=week(),st=w.m.some(x=>x[0]==='warn')?'warn':w.m.length?'info':'ok';
+ return`<div class="card"><div class="row" style="justify-content:space-between"><button data-act=wprev>◀ 前の週</button><b>${w.days[0].ds.slice(5).replace('-','/')} 〜 ${w.days[6].ds.slice(5).replace('-','/')}</b><button data-act=wnext>次の週 ▶</button></div></div>
+ ${w.days.map((x,i)=>`<div class="card" style="${x.ds===S.date?'border-color:var(--acc)':''}"><div class="row"><b style="width:56px">${WD[i]} ${x.ds.slice(5).replace('-','/')}</b><span style="flex:1;min-width:120px" class="${x.match?'info':x.high?'bad':''}">${x.match?'試合'+(x.label?'：'+esc(x.label):''):x.rest?'休養':x.ss.length?x.ss.map(t=>ZN[t.z]+' '+t.value+'m×'+t.reps).join(' / '):x.has?'（セットなし）':'―'}</span></div>
+ <div class="row" style="margin-top:6px"><button class="p" data-act=wrec data-id=${x.ds}>${x.has&&!x.rest&&!x.match?'上書き':'今のメニューを記録'}</button><button data-act=wrest data-id=${x.ds}>休</button><button data-act=wmatch data-id=${x.ds}>試合</button><button class="d" data-act=wclr data-id=${x.ds}>消す</button></div></div>`).join('')}
+ <div class="card"><h3>この週の確認（高強度 ${w.hd}/${w.pr.hd}日・練習 ${w.tr}日・試合 ${w.md}日・負荷最大 ${w.mx.toFixed(1)}/${w.pr.wc}）</h3><div class="bn ${st==='warn'?'warn':st==='info'?'info':'ok'}" style="margin-bottom:6px">${st==='ok'?'✅ 問題は見つかっていません':st==='warn'?'⚠️ 注意が必要です':'ℹ️ 確認事項があります'}</div>${w.m.length?w.m.map(x=>`<div class="${x[0]==='warn'?'warn':'info'}">${x[0]==='warn'?'⚠️':'ℹ️'} ${x[1]}</div>`).join(''):'<div class="ok">✅ この週の記録では、問題は見つかっていません。</div>'}
+ <p class="mut">「今のメニューを記録」で、メニュー画面のセットをその日に記録します。負荷は各セットの量を目的別の上限で割り、目的ごとの重みをかけて合計します。しきい値は経験則に基づく目安で、チームのタイプで変わります。</p></div>`}
+function rlist(){const q=S.rq.trim();return S.athletes.filter(a=>!q||a.name.includes(q)).map(a=>`<div class="card"><div class="row">${inT('a',a.id,'name',a.name)}<label style="flex-direction:row;align-items:center;gap:4px"><input type="checkbox" style="min-height:0" data-k=a data-id=${a.id} data-f=on ${a.on?'checked':''}>出席</label></div>
+ <div class="row" style="margin-top:6px"><label>100m${inT('a',a.id,'pb100',a.pb100)}</label><label>200m${inT('a',a.id,'pb200',a.pb200)}</label><label>400m${inT('a',a.id,'pb400',a.pb400,'1:05.2')}</label></div>
+ <div class="row" style="margin-top:6px"><label>レベル<select data-k=a data-id=${a.id} data-f=level>${opt([[1,'1 入門'],[2,'2 初級'],[3,'3 中級'],[4,'4 上級'],[5,'5 全国']],0,a.level)}</select></label><label>主種目<select data-k=a data-id=${a.id} data-f=event>${opt([['100','100m系'],['200','200m系'],['400','400m系']],0,a.event)}</select></label><button class="d" data-act=delath data-id=${a.id} style="margin-left:auto;align-self:flex-end">削除</button></div></div>`).join('')}
+function vRoster(){return`<div class="card"><div class="row"><input type="text" class="w" style="flex:1" data-k=c data-f=rq placeholder="名前で検索" value="${esc(S.rq)}"><button data-act=allon>全員出席</button><button data-act=alloff>全員欠席</button></div><div class="mut">出席 ${present().length}/${S.athletes.length}名</div></div><div data-live=rlist>${rlist()}</div><details class="card"><summary>名前をまとめて追加</summary><p class="mut">1行に1人。「名前,100m,200m,400m,レベル(1-5),主種目(100/200/400)」のように、カンマ区切りで続けて書くこともできます（名前だけでも可）。</p><textarea id="bn" rows="5" class="w" placeholder="山田太郎&#10;佐藤花子,13.50,27.80,1:05.2,2,400"></textarea><button class="p" data-act=bulk style="margin-top:6px">追加</button></details><button class="p" data-act=addath style="width:100%">＋ 選手を1人追加</button>`}
+function vConf(){return`<div class="card"><h3>かんたん設定</h3><div class="row"><label>チームのタイプ<select data-k=c data-f=team>${opt(Object.entries(PROF).map(([k,v])=>[k,v.n]),0,S.team)}</select></label></div><p class="mut">${P().d}　総量の上限・入門／初級の倍率・本数・週の目安をまとめて切り替えます。</p></div>
+ <div class="card"><h3>計算の条件</h3><div class="row"><label>計時<select data-k=c data-f=timing>${opt([['auto','電動'],['manual','手動']],0,S.timing)}</select></label><label>スタート<select data-k=c data-f=start>${opt([['blocks','ブロック'],['stand','スタンディング'],['fly','フライング']],0,S.start)}</select></label>
+ <label>路面<select data-k=c data-f=surface>${opt([['tartan','タータン'],['dirt','土・芝']],0,S.surface)}</select></label><label>シューズ<select data-k=c data-f=shoe>${opt([['spike','スパイク'],['running','ランシュー']],0,S.shoe)}</select></label>
+ <label>気温<select data-k=c data-f=climate>${opt([['normal','通常'],['cold','冬季（上限10%減）']],0,S.climate)}</select></label><label>調子<select data-k=c data-f=form>${opt([[1,'ベスト（PB基準）'],[.98,'PBの98%'],[.96,'PBの96%'],[.94,'PBの94%']],0,S.form)}</select></label></div></div>
+ ${vLim()}<div class="card"><h3>目的の詳細</h3>${Z.map(z=>{const d=TD[z[0]],c=L().cap[z[0]];return`<details id="h-${z[0]}" ${S.help===z[0]?'open':''}><summary>${z[1]}</summary><p>強度: ${d[0]}<br>距離: ${d[1]}<br>主な目的: ${d[2]}<br>特徴: ${d[3]}</p><p class="mut">総量の上限（上級）: 100m・200m系 ${c[0]}m／400m系 ${c[1]}m</p><div class="mut">実施した種目のメモ</div><textarea rows="4" class="w" data-k=N data-f=${z[0]} data-nr=1 placeholder="例: 10/2 200m×3本(92%)">${esc(S.notes[z[0]]||'')}</textarea><button data-act=nadd data-id=${z[0]} style="margin-top:6px">今のセットを追記</button></details>`}).join('')}
+ <p class="mut">全体像: 「テンポ」で土台と回復力をつくり、「インテンシブ」で苦しさに耐える容量を広げ、「スピード持久」で最高速の維持力を高め、最後に「特殊持久」でレースの過酷さに適応します。</p></div>
+ <div class="card"><h3>表示</h3><div class="row"><label>文字の大きさ<select data-k=c data-f=fs>${opt([['n','標準'],['l','大きめ']],0,S.fs||'n')}</select></label></div><p class="mut">屋外で見にくいときは、「大きめ」にしてください。</p></div>
+ <div class="card"><h3>バックアップ</h3><div class="${bkInfo().w?'warn':'mut'}"><b>${bkInfo().t}</b></div>
+ <div class="row" style="margin-top:6px"><button class="p" data-act=export>ファイルで保存</button><button data-act=bshare>送信（共有）</button><button data-act=bcopy>コピー</button><button data-act=import>ファイルから復元</button><input type="file" id="f" hidden></div>
+ <details style="margin-top:8px"><summary>貼り付けて復元</summary><textarea id="bt" rows="4" class="w" placeholder="コピーしたバックアップを貼り付け"></textarea><button data-act=bpaste style="margin-top:6px">貼り付けた内容で復元</button></details>
+ <p class="mut">PC版のバックアップ（JSON）を読み込めます。保存したものは、PC版でも読み込めます（週の記録やメモも保持されます）。データはこの端末のブラウザに保存されるため、端末やブラウザを変える前に、必ずバックアップしてください。</p></div>
+ <div class="card"><h3>ホーム画面に追加</h3><p class="mut">iPhone: Safariで開き、共有ボタンから「ホーム画面に追加」。Android: Chromeのメニューから「ホーム画面に追加」または「アプリをインストール」。1タップで開けるようになります。</p></div>
+ <div class="card mut">スマホ版は、日々の使用に必要な機能に絞っています。名簿CSVの読み込み・書き出しは、PC版をお使いください。数値は経験則に基づく目安です。</div>`}
+function groups(){const k='pb'+S.gdist,sz=Math.max(1,+S.gsz||4),cmp=(a,b)=>{const x=pt(a[k]),y=pt(b[k]);if(isNaN(x)&&isNaN(y))return 0;if(isNaN(x))return 1;if(isNaN(y))return-1;return x-y},s=[...present()].sort(cmp),g=[];for(let i=0;i<s.length;i+=sz)g.push(s.slice(i,i+sz));
+ if(S.gfix){const n=Math.max(1,+S.gn||g.length),o=Array.from({length:n},()=>[]);s.forEach(a=>{let i=S.gfix[a.id];if(i==null)i=g.findIndex(x=>x.includes(a));o[Math.min(Math.max(i,0),n-1)].push(a)});o.forEach(x=>x.sort(cmp));return{g:o,k}}
+ return{g,k}}
+const gidx=()=>{const m={};groups().g.forEach((x,i)=>x.forEach(a=>m[a.id]=i));return m};
+const gfreeze=()=>{if(!S.gfix){const G=groups();S.gfix={};G.g.forEach((x,i)=>x.forEach(a=>S.gfix[a.id]=i));S.gn=G.g.length}};
+function groupBox(ed){const{g,k}=groups();
+ const chip=a=>{const t=pt(a[k])>0?ft(pt(a[k])):'PBなし',on=S.gsel===a.id;return ed?`<button data-act=gpick data-id=${a.id} style="${on?'background:var(--acc);color:#fff;':''}min-height:40px;margin:2px">${esc(a.name)} <span class="mut" style="${on?'color:#fff':''}">(${t})</span></button>`:esc(a.name)+'<span class="mut">('+t+')</span>'};
+ const body=g.map((x,i)=>`<div style="margin:6px 0"><div class="row" style="justify-content:space-between"><b>第${i+1}組（${x.length}名）</b>${ed&&S.gsel!=null?`<button data-act=gmove data-id=${i}>ここへ移動</button>`:''}</div><div>${x.length?x.map(chip).join(ed?'':'、'):'<span class="mut">（選手なし）</span>'}</div></div>`).join('')||'<div class="mut">出席の選手がいません。</div>';
+ const bar=ed?`<div class="row" style="margin:6px 0"><button data-act=gnew>＋ 組を追加</button><button data-act=gauto>自動に戻す</button></div><div class="mut" style="margin-bottom:6px">${S.gfix?'手動で編集中です。基準や人数を変えても、並びは変わりません（「自動に戻す」で自動の組分けに戻ります）。':'選手をタップして選び、別の組の選手をタップすると入れ替わります。「ここへ移動」で、その組へ移せます。'}${S.gsel!=null?'<br><b>選択中: '+esc((S.athletes.find(a=>a.id===S.gsel)||{}).name||'')+'</b>':''}</div>`:'';
+ return bar+body}
+const sumS=ss=>ss.map(s=>`${s.v}m×${s.r}`).join(' / ');
+function vMenus(){return`<details class="card" id="md" ${S.mo?'open':''}><summary>マイメニュー・履歴</summary>
+ <div class="row" style="margin:8px 0"><input type="text" id="mn" class="w" style="flex:1" placeholder="メニュー名（例: SE強化日）"><button class="p" data-act=msave>今のメニューを保存</button></div>
+ ${S.menus.length?S.menus.map(m=>`<div class="row" style="margin:4px 0"><div style="flex:1;min-width:0"><b>${esc(m.name)}</b><div class="mut">${sumS(m.sets)}</div></div><button data-act=mload data-id=${m.id}>呼び出し</button><button class="d" data-act=mdel data-id=${m.id}>削除</button></div>`).join(''):'<div class="mut">保存したメニューはありません。</div>'}
+ <h3 style="margin-top:12px">練習の履歴</h3><div class="row"><button class="p" data-act=hsave>${S.date.slice(5).replace('-','/')} の練習として保存</button><button data-act=hlast>前回のメニューをコピー</button></div>
+ ${S.hist.length?[...S.hist].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,30).map(h=>`<div class="row" style="margin:4px 0"><div style="flex:1;min-width:0"><b>${h.date.replace(/-/g,'/')}</b><div class="mut">${sumS(h.sets)}</div></div><button data-act=hload data-id=${h.id}>呼び出し</button><button class="d" data-act=hdel data-id=${h.id}>削除</button></div>`).join(''):'<div class="mut">履歴はまだありません。</div>'}</details>`}
+function vLim(){const l=L(),n=(p,v,st)=>`<input type="number" inputmode="decimal" step="${st||'any'}" data-k=L data-f="${p}" data-nr=1 value="${v}" style="width:76px">`;
+ return`<details class="card"><summary>上限の細かい設定${S.lim?' <span class="warn">（変更済み）</span>':''}</summary><p class="mut">チームのタイプを選び直すと、すべて初期値に戻ります。数値は経験則に基づく目安です。</p>
+ <h3>総量の上限（上級・m）</h3><div class="tw"><table><tr><th>目的</th><th>100・200m系</th><th>400m系</th></tr>${Z.map(z=>`<tr><td>${z[1]}</td><td>${n('cap.'+z[0]+'.0',l.cap[z[0]][0],50)}</td><td>${n('cap.'+z[0]+'.1',l.cap[z[0]][1],50)}</td></tr>`).join('')}</table></div>
+ <h3>レベルの倍率（総量）</h3><div class="row">${l.lf.map((v,i)=>`<label>Lv${i+1}${n('lf.'+i,v,.05)}</label>`).join('')}</div>
+ <h3>1本の距離の上限（m・100m系）</h3><div class="tw"><table><tr><th>目的</th>${[1,2,3,4,5].map(i=>`<th>Lv${i}</th>`).join('')}</tr>${Z.map(z=>`<tr><td>${z[1]}</td>${l.rep[z[0]].map((v,i)=>`<td>${n('rep.'+z[0]+'.'+i,v,10)}</td>`).join('')}</tr>`).join('')}</table></div>
+ <h3>種目別の距離の倍率</h3><div class="row">${['100m系','200m系','400m系'].map((t,i)=>`<label>${t}${n('er.'+i,l.er[i],.05)}</label>`).join('')}</div>
+ <h3>特殊持久・最大スピードの本数の上限</h3><div class="row">${l.mr.map((v,i)=>`<label>Lv${i+1}${n('mr.'+i,v,1)}</label>`).join('')}</div>
+ <h3>週単位の目安</h3><div class="row"><label>高強度の日数${n('wk.hd',l.wk.hd,1)}</label><label>週の負荷の上限${n('wk.wc',l.wk.wc,.5)}</label><label>試合1日の負荷${n('wk.ml',l.wk.ml,.5)}</label></div></details>`}
+function printView(){const ss=sets(),ps=present(),rc=S.rec!==0;
+ return`<h1>今日の練習 目標タイム</h1><div>${S.date.replace(/-/g,'/')}　${SEASON[S.season][0]}</div><div class="pbx">${ss.map(s=>`<div><b>${s.v}m × ${s.r}本</b><div>${ZN[setZ(s)]} ${setI(s)}%</div><div>レスト ${restTxt(s)}${blk(s)}</div></div>`).join('')}</div>
+ <table class="pt"><tr><th>選手</th>${ss.map(s=>`<th>${s.v}m</th>`).join('')}</tr>${ps.map(a=>`<tr><td>${esc(a.name)}</td>${ss.map(s=>{const t=tgt(a,s.v,setI(s),setZ(s));return`<td><div class="tm">${t?ft(t):'―'}</div>${rc?`<div class="rc">${Array.from({length:Math.min(+s.r,10)},()=>'<i></i>').join('')}</div>`:''}</td>`}).join('')}</tr>`).join('')}</table>
+ ${S.gp?`<h3 style="margin-top:12px">組分け（${S.gdist}m PBの順・1組${S.gsz}人）</h3>${groupBox()}`:''}
+ <p style="font-size:11px">※目標タイムは${S.timing==='manual'?'手動計時':'電動計時'}の基準${S.surface==='dirt'?'・土/芝の補正済み':''}です。</p>`}
+function doPrint(){$('#pv').innerHTML=printView();print()}
+const QS={rec:[200,4],ext:[200,8],int:[200,6],se:[150,4],se2:[250,2],max:[60,4]};
+const fmtMs=ms=>{const t=Math.max(0,ms)/1000,m=Math.floor(t/60);return(m?m+':':'')+(t-m*60).toFixed(2).padStart(m?5:4,'0')};
+const curSet=()=>{const ss=sets();return ss.find(x=>x.id===S.sel.sid)||ss[0]};
+const mem=()=>{const G=groups();return S.sel.g>=0&&G.g[S.sel.g]?G.g[S.sel.g]:present()};
+const glab=g=>g>=0?'第'+(g+1)+'組':'全員';
+function vRecs(){const rs=S.tm.filter(r=>r.date===S.date).sort((a,b)=>b.id-a.id),other=S.tm.length-rs.length;
+ return`<div class="card"><h3>${S.date.replace(/-/g,'/')} の計測記録（${rs.length}件）</h3>${rs.map(r=>`<details style="margin:6px 0"><summary>${r.v}m ${r.rep}本目・${glab(r.g)}（${r.res.length}名）</summary>${[...r.res].sort((a,b)=>a.t-b.t).map(x=>{const a=S.athletes.find(y=>y.id===x.a);if(!a)return'';const tg=tgt(a,r.v,r.I,r.z),df=tg?x.t-tg:null;return`<div class="row" style="justify-content:space-between;margin:3px 0"><span>${esc(a.name)}</span><span><b>${ft(x.t)}</b>${df==null?'':` <span class="${df<=0?'ok':'warn'}">${df<=0?'':'+'}${df.toFixed(2)}</span>`}</span></div>`}).join('')}<button class="d" data-act=mrdel data-id=${r.id}>この記録を削除</button></details>`).join('')||'<div class="mut">まだ記録がありません。</div>'}
+ ${rs.length?'<button data-act=mshare style="margin-top:6px">記録をテキストで共有・コピー</button>':''}${other?`<div class="mut" style="margin-top:6px">ほかの日の記録: ${other}件（バックアップに含まれます）</div>`:''}<div class="mut">差は、目標タイムとの差です（＋は目標より遅い）。手動計時のため、0.1〜0.3秒程度の誤差があります。</div></div>`}
+const membersOf=g=>{const G=groups();return g>=0&&G.g[g]?G.g[g]:present()};
+const RUN0=()=>({stage:'ready',t0:0,gs:[],gi:0});
+const gts=e=>e.abs.map(x=>x-(e.off||0)+(e.adj||0));
+function newRun(now){const G=groups(),gap=(S.sel.gap==null?5:+S.sel.gap)*1000,gl=S.sel.g===-2?G.g.map((x,i)=>i).filter(i=>G.g[i].length):[S.sel.g];return{stage:'run',t0:now,gi:0,gs:gl.map((g,i)=>({g,off:i===0?0:null,abs:[],asg:{},act:0,adj:0}))}}
+function vAssign(){const R=S.run,e=R.gs[R.gi]||R.gs[0],m=membersOf(e.g),used=new Set(Object.values(e.asg).flat()),pool=m.filter(a=>!used.has(a.id)),ts=gts(e),noTie=ts.length>=m.length;
+ return`<div class="card"><div class="row">${R.gs.map((x,i)=>`<button data-act=mgi data-id=${i} class="${i===R.gi?'p':''}">${glab(x.g)}${x.abs.length?'':'（記録なし）'}</button>`).join('')}</div>
+ <div class="mut" style="margin-top:6px">${glab(e.g)}：ゴールの行をタップして選び、下の選手をタップすると、その行に入ります。${noTie?'':'ゴールの数が人数より少ないので、同タイムの選手は、同じ行に続けて割り当ててください。'}</div>
+ <div class="row" style="margin-top:6px"><span class="mut">この組のタイム補正（スタートのずれ）</span><button data-act=moff data-id=-1>−0.1</button><button data-act=moff data-id=1>＋0.1</button><b>${(e.adj>0?'+':'')+((e.adj||0)/1000).toFixed(1)}秒</b></div></div>
+ ${ts.map((ms,i)=>`<div class="card" data-act=mact data-id=${i} style="border:2px solid ${e.act===i?'var(--acc)':'var(--line)'}"><div class="row" style="justify-content:space-between"><b>${i+1}番目のゴール</b><span class="t">${fmtMs(ms)}</span></div><div class="row" style="margin-top:6px">${(e.asg[i]||[]).map(id=>{const a=m.find(x=>x.id===id);return a?`<button data-act=munasg data-id=${id}>${esc(a.name)} ✕</button>`:''}).join('')||'<span class="mut">選手が未割り当て</span>'}</div></div>`).join('')||'<div class="card mut">この組のゴールの記録がありません。</div>'}
+ <div class="card"><h3>未割り当て（${pool.length}名）</h3><div class="chips">${pool.map(a=>`<button data-act=masg data-id=${a.id}>${esc(a.name)}</button>`).join('')||'<span class="mut">全員を割り当て済みです</span>'}</div></div>
+ <div class="row"><button class="p" data-act=msv style="flex:1">すべての組の記録を保存</button><button class="d" data-act=mabort>破棄</button></div>`}
+function vMeas(){const ss=sets();if(!ss.length)return'<div class="card mut">メニューにセットがありません。「メニュー」で追加してください。</div>';
+ if(!S.run.gs)S.run=RUN0();
+ const R=S.run,s=curSet(),m=mem(),G=groups(),stg=R.stage,lk=stg!=='ready'?'disabled':'',ng=G.g.filter(x=>x.length).length,multi=S.sel.g===-2;
+ const rest=S.restEnd>Date.now()?`<div class="card" style="text-align:center"><div class="mut">レスト（${restTxt(s)}）</div><div class="bigt" id="rtm">${fmtMs(S.restEnd-Date.now())}</div></div>`:'';
+ const sel=`<div class="card"><div class="row"><label>セット<select ${lk} data-k=ms data-f=sid>${ss.map(x=>`<option value="${x.id}"${x.id===s.id?' selected':''}>${x.v}m ${ZN[setZ(x)]}</option>`).join('')}</select></label><label>本目<select ${lk} data-k=ms data-f=rep>${Array.from({length:Math.max(1,+s.r)},(_,i)=>`<option value="${i+1}"${S.sel.rep===i+1?' selected':''}>${i+1}本目</option>`).join('')}</select></label><label>対象<select ${lk} data-k=ms data-f=g><option value="-1"${S.sel.g===-1?' selected':''}>全員（${present().length}名）</option>${ng>1?`<option value="-2"${multi?' selected':''}>全組・時差スタート（${ng}組）</option>`:''}${G.g.map((x,i)=>`<option value="${i}"${S.sel.g===i?' selected':''}>第${i+1}組（${x.length}名）</option>`).join('')}</select></label>${multi?`<label>目安の間隔（秒）<input type="number" inputmode="decimal" ${lk} data-nr=1 data-k=ms data-f=gap value="${S.sel.gap==null?5:S.sel.gap}"></label>`:''}</div>
+  <div class="mut" style="margin-top:6px">${s.v}m・${sumLine(s)}　対象 ${m.length}名</div>${multi?'<div class="mut">第1組のスタートを押したあと、第2組以降は、それぞれのスタートの合図に合わせて、組ごとの「スタート」ボタンを押します（間隔は目安で、自動ではスタートしません）。ゴールは、組ごとのボタンを押します。</div>':''}</div>`;
+ if(stg==='run'){const now=Date.now(),n=R.gs.length,c=n<=3?1:n<=8?2:3,gp=S.sel.gap==null?5:+S.sel.gap;
+  const tile=(e,i)=>{const mm=membersOf(e.g),w=e.off==null,el=w?now-R.t0:now-R.t0-e.off,last=e.abs.length?fmtMs(gts(e)[e.abs.length-1]):'';
+   return`<div class="tile" style="${w?'':'border-color:var(--acc)'}"><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><b style="font-size:14px">${glab(e.g)}</b><span class="mut">${w?'待機中・目安'+i*gp+'秒後':'ゴール '+e.abs.length+'/'+mm.length}</span></div>
+   <div class="tt" data-tmr=${i}>${w?'第1組から '+fmtMs(el):fmtMs(el)}</div>
+   <button class="big${w?'':' p'}" ${w?'style="background:var(--ok);color:#fff;border-color:var(--ok)"':''} data-fast=${w?'gstart':'goal'} data-g=${i}>${w?glab(e.g)+' スタート':'ゴール'}</button>
+   <div class="row" style="justify-content:space-between;flex-wrap:nowrap"><span class="mut">${last?'直近 '+last:''}</span>${w?'':`<button class="sm" data-act=mundo data-id=${i}>取消</button>`}</div></div>`};
+  return`<div class="rw"><div class="mut" style="padding:0 4px 6px">${s.v}m ${S.sel.rep}本目・${sumLine(s)}</div><div class="rg" style="grid-template-columns:repeat(${c},1fr)">${R.gs.map(tile).join('')}</div><button class="p" data-act=mend style="margin-top:8px;min-height:48px">計測を終える</button></div>`}
+ if(stg==='assign')return vAssign();
+ return`${rest}${sel}<button class="p goal" data-fast=start>${multi?'第1組 スタート':'スタート'}</button><div class="mut" style="text-align:center;margin-bottom:10px">${multi?'第1組のスタートの合図と同時に、押してください。':'一斉スタートの合図と同時に、押してください。'}</div>${vRecs()}`}
+const view=()=>({today:vToday,times:vTimes,meas:vMeas,week:vWeek,roster:vRoster,conf:vConf})[S.tab]();
+function render(){const hd=$('header');if(hd)hd.innerHTML='練習強度設定 <span class="mut">スマホ版</span><span class="dt">'+S.date.replace(/-/g,'/')+'（'+'日月火水木金土'[pY(S.date).getDay()]+'）</span>';if(document.documentElement&&document.documentElement.classList)document.documentElement.classList.toggle('big',S.fs==='l');$('#m').innerHTML=view();$('#nav').innerHTML=TABS.map(t=>`<button data-act=tab data-id=${t[0]} class="${S.tab===t[0]?'on':''}"><span class="ic">${TI[t[0]]}</span>${t[1]}${t[0]==='conf'&&bkInfo().w?' <span class="warn">●</span>':''}</button>`).join('');
+ const f=$('#f');if(f)f.onchange=e=>{const fl=e.target.files[0];if(!fl)return;toast('読み込み中…');const r=new FileReader();r.onload=async()=>{try{await imp(JSON.parse(r.result))}catch(x){toast('読み込めませんでした（'+(x&&x.message?x.message:'形式が違います')+'）')}};r.onerror=()=>toast('ファイルを読み込めませんでした');r.readAsText(fl);e.target.value=''}}
+function refresh(){const d=new DOMParser().parseFromString('<body>'+view()+'</body>','text/html');document.querySelectorAll('[data-live]').forEach(el=>{const n=d.querySelector('[data-live="'+el.dataset.live+'"]');if(n)el.innerHTML=n.innerHTML})}
+async function imp(d){const n={};if(Array.isArray(d.athletes))n.athletes=d.athletes.map(a=>({id:a.id,name:a.name||'',pb100:a.pb100||'',pb200:a.pb200||'',pb400:a.pb400||'',level:a.level||3,event:a.event||'100',on:a.isPresent!==false?1:0,o:a}));
+ if(Array.isArray(d.customDistances))n.sets=d.customDistances.map(s=>({id:s.id,v:s.value,r:s.reps||1,p:s.purpose||'',i:s.intensity>=50?s.intensity:'',rest:s.rest||'',pb:s.perBlock||1,restIn:s.restIn||'',o:s}));
+ [['season','season'],['startMode','start'],['formFactor','form'],['surface','surface'],['shoe','shoe'],['climate','climate'],['timingMode','timing'],['intensity','intensity']].forEach(([a,b])=>{if(d[a]!=null)n[b]=d[a]});if(n.climate==='optimal')n.climate='normal';
+ if(d.weeklyLog&&typeof d.weeklyLog==='object')n.wlog=d.weeklyLog;
+ if(d.limits&&Array.isArray(d.limits.factors)){const t=Object.keys(PROF).find(k=>JSON.stringify(PROF[k].lf)===JSON.stringify(d.limits.factors)&&JSON.stringify(PROF[k].mr)===JSON.stringify(d.limits.maxReps));if(t)n.team=t}
+ if(Array.isArray(d.savedMenus))n.menus=d.savedMenus.map(m=>({id:m.id,name:m.name||'',intensity:m.intensity,sets:(m.customDistances||[]).map(x=>({v:x.value,r:x.reps||1,p:x.purpose||'',i:x.intensity>=50?x.intensity:'',rest:x.rest||'',pb:x.perBlock||1,restIn:x.restIn||''})),o:m}));
+ if(Array.isArray(d.practiceHistory))n.hist=d.practiceHistory;
+ {const lm=d.limits;if(lm&&lm.capLv4&&lm.repDist&&Array.isArray(lm.factors)&&Array.isArray(lm.maxReps))n.lim={cap:lm.capLv4,lf:lm.factors,mr:lm.maxReps,rep:lm.repDist,er:Array.isArray(lm.eventRep)?lm.eventRep:[1,1.25,1.6],wk:{hd:(lm.weekly||{}).maxHighDays??3,wc:(lm.weekly||{}).cap??3.5,ml:(lm.weekly||{}).matchLoad??1}}}
+ if(d.purposeNotes&&typeof d.purposeNotes==='object')n.notes=d.purposeNotes;if(d.groupSize)n.gsz=d.groupSize;if(d.groupBaseDist)n.gdist=String(d.groupBaseDist);
+ if(Array.isArray(d.practiceTimes))n.tm=d.practiceTimes;
+ n.gfix=null;n.gn=0;n.gsel=null;if(d.groupManual&&d.groupManual.fix){n.gfix=d.groupManual.fix;n.gn=d.groupManual.n||0}
+ n.extra=d;n.nid=1+Math.max(0,...(n.athletes||S.athletes).map(a=>a.id),...(n.sets||S.sets).map(s=>s.id));if(await ask('現在のデータを、読み込んだデータに置き換えますか？\n（先に今のデータをバックアップしておくと安心です）',{ok:'置き換える'})){toast('復元しました（選手'+((n.athletes||S.athletes).length)+'名・セット'+((n.sets||S.sets).length)+'件）');Object.assign(S,n);if(S.lim&&JSON.stringify(S.lim)===JSON.stringify(base()))S.lim=null;save();render()}}
+function bk(){const x=S.extra||{},lm=x.limits||{},p=P(),d={...x,version:14,intensity:S.intensity,season:S.season,startMode:S.start,formFactor:+S.form,surface:S.surface,shoe:S.shoe,climate:S.climate==='normal'?'optimal':S.climate,timingMode:S.timing,weeklyLog:S.wlog,practiceHistory:S.hist,practiceTimes:S.tm,purposeNotes:S.notes,groupManual:S.gfix?{fix:S.gfix,n:S.gn}:null,groupSize:+S.gsz,groupBaseDist:String(S.gdist),
+ savedMenus:S.menus.map(m=>({...(m.o||{}),id:m.id,name:m.name,intensity:m.intensity,...(m.env?{surface:m.env.surface,shoe:m.env.shoe,climate:m.env.climate==='normal'?'optimal':m.env.climate,timingMode:m.env.timing,season:m.env.season,startMode:m.env.start,formFactor:+m.env.form}:{}),customDistances:m.sets.map((x,i)=>({id:i+1,value:+x.v,reps:+x.r,purpose:x.p,intensity:x.i===''?'':+x.i,rest:x.rest||'',perBlock:+x.pb||1,restIn:x.restIn||''}))})),
+ limits:{...lm,ver:lm.ver||8,capLv4:L().cap,factors:L().lf,maxReps:L().mr,repDist:L().rep,eventRep:L().er,weekly:{...(lm.weekly||{}),maxHighDays:L().wk.hd,cap:L().wk.wc,matchLoad:L().wk.ml}},
+ athletes:S.athletes.map(a=>({...(a.o||{}),id:a.id,name:a.name,pb100:a.pb100,pb200:a.pb200,pb400:a.pb400,level:+a.level,event:a.event,isPresent:!!a.on})),
+ customDistances:S.sets.map(s=>({...(s.o||{}),id:s.id,value:+s.v,reps:+s.r,purpose:s.p,intensity:s.i===''?'':+s.i,rest:s.rest||'',perBlock:+s.pb||1,restIn:s.restIn||''}))};
+ return d}
+const bkInfo=()=>{const d=S.lastBackup?Math.floor((Date.now()-S.lastBackup)/864e5):null,w=d===null||d>=30;return{w,t:d===null?'バックアップ未実施です。定期的に保存してください。':d===0?'本日バックアップ済み':'最終バックアップ '+d+'日前'+(w?'（30日以上たっています）':'')}};
+const mark=()=>{S.lastBackup=Date.now();save()};
+function exp(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(bk())],{type:'application/json'}));a.download='sprint_backup_'+new Date().toISOString().slice(0,10).replace(/-/g,'')+'.json';a.click();URL.revokeObjectURL(a.href);mark();render()}
+function bcopy(){const t=JSON.stringify(bk());if(navigator.clipboard)navigator.clipboard.writeText(t).then(()=>{mark();render();toast('バックアップをコピーしました。メモやLINEなどに貼り付けて保管できます。')});else ask('全体を選んでコピーしてください',{input:1,def:t,cancel:'',ok:'閉じる'})}
+async function bshare(){const f=new File([JSON.stringify(bk())],'sprint_backup.json',{type:'application/json'});if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f]});mark();render()}catch(e){}}else bcopy()}
+async function bpaste(){const t=document.getElementById('bt');try{await imp(JSON.parse(t.value))}catch(e){toast('貼り付けた内容を読み込めませんでした')}}
+function shareText(){const h='【'+S.date.replace(/-/g,'/')+' 今日の練習】\n'+sets().map(s=>`${s.v}m×${s.r}本（${sumLine(s)}）`).join('\n')+'\n\n';
+ const b=present().map(a=>a.name+'：'+sets().map(s=>{const t=tgt(a,s.v,setI(s),setZ(s));return s.v+'m '+(t?ft(t):'―')}).join(' / ')).join('\n');const t=h+b;
+ if(navigator.share)navigator.share({text:t}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(t).then(()=>toast('コピーしました'));else ask('全体を選んでコピーしてください',{input:1,def:t,cancel:'',ok:'閉じる'})}
+function ask(msg,o){o=o||{};return new Promise(res=>{const d=$('#dlg');d.innerHTML='<div class="dbox"><p>'+esc(msg)+'</p>'+(o.input?'<textarea id="dli" class="w" rows="'+(o.def&&o.def.length>80?5:1)+'">'+esc(o.def||'')+'</textarea>':'')+'<div class="row" style="justify-content:flex-end;margin-top:8px">'+(o.cancel===''?'':'<button data-dl=0>'+(o.cancel||'キャンセル')+'</button>')+'<button class="p" data-dl=1>'+(o.ok||'OK')+'</button></div></div>';d.style.display='flex';d.onclick=e=>{const b=e.target.closest('[data-dl]');if(!b)return;const ok=b.dataset.dl==='1',v=o.input?document.getElementById('dli').value:null;d.style.display='none';d.innerHTML='';res(o.input?(ok?v:null):ok)}})}
+let undoSnap=null,sbT=null;
+const setPath=(p,v)=>{if(!S.lim)S.lim=JSON.parse(JSON.stringify(base()));const a=p.split('.');let o=S.lim;for(let i=0;i<a.length-1;i++)o=o[a[i]];o[a[a.length-1]]=v};
+const snap=()=>JSON.stringify({sets:S.sets,athletes:S.athletes,wlog:S.wlog,menus:S.menus,hist:S.hist,tm:S.tm});
+function toast(msg,sn){const el=$('#sb');undoSnap=sn||null;el.innerHTML='<span>'+msg+'</span>'+(sn?'<button data-act=undo>元に戻す</button>':'');el.style.display='flex';clearTimeout(sbT);sbT=setTimeout(()=>{el.style.display='none';undoSnap=null},8000)}
+const upd=el=>{const k=el.dataset.k;if(!k)return 0;if(k==='ms'){S.sel[el.dataset.f]=+el.value;save();return 1}const f=el.dataset.f,id=+el.dataset.id;let v=el.type==='checkbox'?(el.checked?1:0):el.value;
+ if(['v','r','i','intensity','level','wu','cd','form','pb'].includes(f)&&v!==''&&el.type!=='text')v=+v;
+ if(k==='s'){const s=S.sets.find(x=>x.id===id);if(f==='p'){s.p=v;if(v)s.i=STD[v]}else s[f]=v}else if(k==='a')S.athletes.find(x=>x.id===id)[f]=v;else if(k==='L'){if(v!==''&&!isNaN(+v))setPath(f,+v)}else if(k==='N')S.notes[f]=v;else S[f]=v;if(f==='team')S.lim=null;
+ if(el.classList)el.classList.toggle('err',!!bad(k,f,v));save();return 1};
+document.addEventListener('toggle',e=>{const i=e.target.id;if(i==='md')S.mo=e.target.open?1:0;if(i==='gd')S.go=e.target.open?1:0},true);
+document.addEventListener('pointerdown',e=>{const b=e.target.closest('[data-fast]');if(!b)return;const f=b.dataset.fast,now=Date.now();if(!S.run.gs)S.run=RUN0();
+ if(f==='start'&&S.run.stage==='ready'){S.run=newRun(now);S.restEnd=0;try{navigator.vibrate&&navigator.vibrate(30)}catch(x){}try{navigator.wakeLock&&navigator.wakeLock.request('screen').catch(()=>{})}catch(x){}}
+ else if(S.run.stage==='run'&&(f==='goal'||f==='gstart')){const g=S.run.gs[+b.dataset.g];if(!g)return;const rel=now-S.run.t0;if(f==='goal'){if(g.off==null)return;g.abs.push(rel);try{navigator.vibrate&&navigator.vibrate(20)}catch(x){}}else if(g.off==null){g.off=rel;try{navigator.vibrate&&navigator.vibrate(30)}catch(x){}}else return}
+ else return;save();render();e.preventDefault()});
+document.addEventListener('input',e=>{const el=e.target;if(!el.dataset.k||el.tagName==='SELECT'||el.type==='checkbox'||el.type==='date')return;upd(el);if(!el.dataset.nr)refresh()});
+document.addEventListener('change',e=>{const el=e.target;if(!el.dataset.k)return;if(el.tagName!=='SELECT'&&el.type!=='checkbox'&&el.type!=='date'&&!el.dataset.rr)return;upd(el);render()});
+document.addEventListener('click',async e=>{const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act,sid=b.dataset.id,id=+sid;
+ if(a==='tab'){S.tab=sid;scrollTo(0,0)}else if(a==='info'){S.tab='conf';S.help=sid;render();const h=document.getElementById('h-'+sid);if(h)h.scrollIntoView();return}
+ else if(a==='addset')S.sets.push({id:S.nid++,v:100,r:1,p:'',i:'',rest:''});else if(a==='delset'){const sn=snap();S.sets=S.sets.filter(x=>x.id!==id);toast('セットを削除しました',sn)}
+ else if(a==='addath')S.athletes.push({id:S.nid++,name:'選手'+S.nid,pb100:'',pb200:'',pb400:'',level:3,event:'100',on:1});else if(a==='delath'){const sn=snap();S.athletes=S.athletes.filter(x=>x.id!==id);toast('選手を削除しました',sn)}
+ else if(a==='inc'||a==='dec'){const t=S.sets.find(x=>x.id===id),f=b.dataset.f;t[f]=Math.max(f==='v'?10:1,(+t[f]||0)+(+b.dataset.d)*(a==='dec'?-1:1))}
+ else if(a==='qs'){const q=QS[sid];S.sets.push({id:S.nid++,v:q[0],r:q[1],p:sid,i:STD[sid],rest:''})}
+ else if(a==='msave'){const n=(document.getElementById('mn').value||'').trim()||'メニュー'+(S.menus.length+1);S.menus.push({id:S.nid++,name:n,intensity:S.intensity,env:{surface:S.surface,shoe:S.shoe,climate:S.climate,timing:S.timing,season:S.season,start:S.start,form:S.form},sets:S.sets.map(({v,r,p,i,rest,pb,restIn})=>({v,r,p,i,rest,pb,restIn}))});S.mo=1;toast('「'+n+'」を保存しました')}
+ else if(a==='mload'||a==='hload'){const m=(a==='mload'?S.menus:S.hist).find(x=>x.id===id);if(m){S.sets=m.sets.map(x=>({...x,id:S.nid++}));if(m.intensity)S.intensity=m.intensity;if(m.season)S.season=m.season;toast('メニューを呼び出しました')}}
+ else if(a==='mdel'){const sn=snap();S.menus=S.menus.filter(x=>x.id!==id);toast('メニューを削除しました',sn)}
+ else if(a==='hdel'){const sn=snap();S.hist=S.hist.filter(x=>x.id!==id);toast('履歴を削除しました',sn)}
+ else if(a==='hsave'){S.hist=S.hist.filter(h=>h.date!==S.date);S.hist.push({id:S.nid++,date:S.date,intensity:S.intensity,season:S.season,sets:S.sets.map(({v,r,p,i,rest,pb,restIn})=>({v,r,p,i,rest,pb,restIn}))});S.mo=1;toast(S.date.replace(/-/g,'/')+' の練習を保存しました')}
+ else if(a==='hlast'){const h=[...S.hist].sort((x,y)=>y.date.localeCompare(x.date))[0];if(h){S.sets=h.sets.map(x=>({...x,id:S.nid++}));S.intensity=h.intensity||S.intensity;toast(h.date.replace(/-/g,'/')+' のメニューをコピーしました')}else toast('履歴がありません')}
+ else if(a==='bulk'){const L=(document.getElementById('bn').value||'').split(/\r?\n/).map(x=>x.trim()).filter(Boolean);L.forEach(l=>{const c=l.split(/[,\t、]/).map(x=>x.trim()),lv=+c[4],ev=String(c[5]||'').replace(/\D/g,'');S.athletes.push({id:S.nid++,name:c[0],pb100:c[1]||'',pb200:c[2]||'',pb400:c[3]||'',level:lv>=1&&lv<=5?lv:3,event:['100','200','400'].includes(ev)?ev:'100',on:1})});if(L.length)toast(L.length+'名を追加しました')}
+ else if(a==='nadd'){const ss=sets().filter(x=>setZ(x)===sid);if(!ss.length){toast('この目的に当てはまるセットが、メニューにありません。');return}S.notes[sid]=(S.notes[sid]?S.notes[sid]+'\n':'')+S.date.replace(/-/g,'/')+' '+ss.map(x=>`${x.v}m×${x.r}本(${setI(x)}%)`).join(' / ');S.help=sid}
+ else if(a==='mend'){S.run.stage='assign';S.run.gi=Math.max(0,S.run.gs.findIndex(e=>e.abs.length))}
+ else if(a==='mundo'){const e=S.run.gs[id];if(e)e.abs.pop()}
+ else if(a==='mabort'){if(!(await ask('この計測を破棄しますか？',{ok:'破棄する'})))return;S.run=RUN0()}
+ else if(a==='mgi'){S.run.gi=id}
+ else if(a==='mact'){S.run.gs[S.run.gi].act=id}
+ else if(a==='moff'){const e=S.run.gs[S.run.gi];e.adj=(e.adj||0)+id*100}
+ else if(a==='masg'){const e=S.run.gs[S.run.gi],m=membersOf(e.g);(e.asg[e.act]=e.asg[e.act]||[]).push(id);if(e.abs.length>=m.length){const nx=e.abs.findIndex((_,i)=>!(e.asg[i]&&e.asg[i].length));if(nx>=0)e.act=nx}}
+ else if(a==='munasg'){const e=S.run.gs[S.run.gi];Object.keys(e.asg).forEach(k=>{if(e.asg[k].includes(id)){e.asg[k]=e.asg[k].filter(x=>x!==id);e.act=+k}})}
+ else if(a==='msv'){const R=S.run,s=curSet();let left=0;R.gs.forEach(e=>{const u=new Set(Object.values(e.asg).flat());left+=membersOf(e.g).filter(x=>!u.has(x.id)).length});
+  if(left&&!(await ask('未割り当ての'+left+'名は、記録されません。保存しますか？',{ok:'保存する'})))return;
+  let n=0;R.gs.forEach(e=>{const res=[];e.abs.forEach((x,i)=>(e.asg[i]||[]).forEach(aid=>res.push({a:aid,t:(x-(e.off||0)+(e.adj||0))/1000})));if(!res.length)return;n+=res.length;S.tm=S.tm.filter(r=>!(r.date===S.date&&r.sid===s.id&&r.rep===S.sel.rep&&r.g===e.g));S.tm.push({id:S.nid++,date:S.date,sid:s.id,v:s.v,rep:S.sel.rep,g:e.g,z:setZ(s),I:setI(s),res})});
+  S.run=RUN0();S.restEnd=Date.now()+(toSec(restTxt(s))??s.v/1.3)*1000;if(S.sel.rep<+s.r)S.sel.rep++;toast('記録を保存しました（'+n+'名）。次は '+S.sel.rep+'本目です')}
+ else if(a==='mrdel'){const sn=snap();S.tm=S.tm.filter(x=>x.id!==id);toast('記録を削除しました',sn)}
+ else if(a==='mshare'){const t='【'+S.date.replace(/-/g,'/')+' 計測記録】\n'+S.tm.filter(r=>r.date===S.date).sort((a,b)=>a.id-b.id).map(r=>r.v+'m '+r.rep+'本目 '+glab(r.g)+'\n'+[...r.res].sort((a,b)=>a.t-b.t).map(x=>{const a=S.athletes.find(y=>y.id===x.a);return a?a.name+' '+ft(x.t):''}).join('\n')).join('\n\n');if(navigator.share)navigator.share({text:t}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(t).then(()=>toast('コピーしました'));else ask('全体を選んでコピーしてください',{input:1,def:t,cancel:'',ok:'閉じる'});return}
+ else if(a==='gpick'){if(S.gsel==null)S.gsel=id;else if(S.gsel===id)S.gsel=null;else{const m=gidx(),A=S.gsel;if(m[A]!==m[id]){gfreeze();S.gfix[A]=m[id];S.gfix[id]=m[A]}S.gsel=null}}
+ else if(a==='gmove'){if(S.gsel!=null){const m=gidx();if(m[S.gsel]!==id){gfreeze();S.gfix[S.gsel]=id}}S.gsel=null}
+ else if(a==='gnew'){gfreeze();S.gn=(+S.gn||1)+1}
+ else if(a==='gauto'){S.gfix=null;S.gn=0;S.gsel=null}
+ else if(a==='allon'||a==='alloff')S.athletes.forEach(x=>x.on=a==='allon'?1:0);
+ else if(a==='wprev'||a==='wnext'){const d=pY(S.date);d.setDate(d.getDate()+(a==='wprev'?-7:7));S.date=ymd(d)}
+ else if(a==='wrec')S.wlog[sid]={rest:false,sets:sets().map(s=>({value:+s.v,reps:+s.r,intensity:setI(s),purpose:s.p||''}))};
+ else if(a==='wrest')S.wlog[sid]={rest:true,sets:[]};else if(a==='wclr'){const sn=snap();delete S.wlog[sid];toast('この日の記録を消しました',sn)}else if(a==='undo'){if(undoSnap){const o=JSON.parse(undoSnap);S.sets=o.sets;S.athletes=o.athletes;S.wlog=o.wlog;if(o.menus)S.menus=o.menus;if(o.tm)S.tm=o.tm;if(o.hist)S.hist=o.hist;undoSnap=null;$('#sb').style.display='none'}}
+ else if(a==='wmatch'){const n=await ask('試合の名称（任意）',{input:1,def:(S.wlog[sid]&&S.wlog[sid].label)||'',ok:'決定'});if(n===null)return;S.wlog[sid]={rest:false,match:true,label:n.trim(),sets:[]}}
+ else if(a==='export')return exp();else if(a==='import')return $('#f').click();else if(a==='share')return shareText();else if(a==='print')return doPrint();else if(a==='bshare')return bshare();else if(a==='bcopy')return bcopy();else if(a==='bpaste')return bpaste();save();render()});
+setInterval(()=>{const R=S.run;document.querySelectorAll('[data-tmr]').forEach(el=>{const e=R&&R.gs&&R.gs[+el.dataset.tmr];if(!e||R.stage!=='run')return;el.textContent=e.off==null?'第1組のスタートから '+fmtMs(Date.now()-R.t0):fmtMs(Date.now()-R.t0-e.off)});const r=document.getElementById('rtm');if(r){const d=S.restEnd-Date.now();r.textContent=d>0?fmtMs(d):'レスト終了'}},50);
+render();try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+</script></body></html>
